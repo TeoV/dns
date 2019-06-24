@@ -107,19 +107,20 @@ func TestPackDataNsec(t *testing.T) {
 	}
 }
 
-func TestUnpackString(t *testing.T) {
-	msg := []byte("\x00abcdef\x0f\\\"ghi\x04mmm\x7f")
-	msg[0] = byte(len(msg) - 1)
+// Replaced by the tests from issue_tests.go TestErrorPackUnpack
+// func TestUnpackString(t *testing.T) {
+// 	msg := []byte("\x00abcdef\x0f\\\"ghi\x04mmm\x7f")
+// 	msg[0] = byte(len(msg) - 1)
 
-	got, _, err := unpackString(msg, 0)
-	if err != nil {
-		t.Fatal(err)
-	}
+// 	got, _, err := unpackString(msg, 0)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
 
-	if want := `abcdef\015\\\"ghi\004mmm\127`; want != got {
-		t.Errorf("expected %q, got %q", want, got)
-	}
-}
+// 	if want := `abcdef\015\\\"ghi\004mmm\127`; want != got {
+// 		t.Errorf("expected %q, got %q", want, got)
+// 	}
+// }
 
 func BenchmarkUnpackString(b *testing.B) {
 	msg := []byte("\x00abcdef\x0f\\\"ghi\x04mmm")

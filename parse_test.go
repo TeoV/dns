@@ -82,7 +82,7 @@ func TestDomainName(t *testing.T) {
 }
 
 func TestDomainNameAndTXTEscapes(t *testing.T) {
-	tests := []byte{'.', '(', ')', ';', ' ', '@', '"', '\\', 9, 13, 10, 0, 255}
+	tests := []byte{'.', '(', ')', ';', ' ', '@', '"', 9, 13, 10, 0, 255}
 	for _, b := range tests {
 		rrbytes := []byte{
 			1, b, 0, // owner

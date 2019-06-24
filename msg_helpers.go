@@ -272,7 +272,7 @@ func unpackString(msg []byte, off int) (string, int, error) {
 	s.Grow(l)
 	for _, b := range msg[off+1 : off+1+l] {
 		switch {
-		case b == '"' || b == '\\':
+		case b == '"':
 			s.WriteByte('\\')
 			s.WriteByte(b)
 		case b < ' ' || b > '~': // unprintable
