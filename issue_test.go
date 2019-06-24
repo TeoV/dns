@@ -94,3 +94,37 @@ func TestErrorPackUnpack(t *testing.T) {
 		t.Errorf("\nExpecting : <%+v>, but received <%+v> \n", itm, msg2.Answer[0].(*NAPTR).Regexp)
 	}
 }
+
+func TestErrorPackUnpack2(t *testing.T) {
+	m := new(Msg)
+	m.SetQuestion("3.6.9.4.7.1.7.1.5.6.8.9.4.e164.arpa.", TypeNAPTR)
+	rply := new(Msg)
+	rply.SetReply(m)
+	//add answer as NAPTR
+	if len(rply.Answer) == 0 {
+		rply.Answer = append(rply.Answer,
+			&NAPTR{
+				Hdr: RR_Header{
+					Name:   m.Question[0].Name,
+					Rrtype: m.Question[0].Qtype,
+					Class:  ClassINET,
+					Ttl:    60},
+			},
+		)
+	}
+	itm := "/urn:cid:.+@([^\\\\.]+\\\\.)(.*)$/\\\\2/i"
+	rply.Answer[len(rply.Answer)-1].(*NAPTR).Regexp = itm
+	// Pack msg and then unpack into msg2
+	buf, err := rply.Pack()
+	if err != nil {
+		t.Fatalf("rply.Pack failed: %v", err)
+	}
+	itm = "/urn:cid:.+@([^\\.]+\\.)(.*)$/\\2/i"
+	var msg2 Msg
+	if err := msg2.Unpack(buf); err != nil {
+		t.Fatalf("msg2.Unpack failed: %v", err)
+	}
+	if msg2.Answer[0].(*NAPTR).Regexp != itm {
+		t.Errorf("\nExpecting : <%+v>, but received <%+v> \n", itm, msg2.Answer[0].(*NAPTR).Regexp)
+	}
+}
